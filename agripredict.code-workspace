@@ -1,0 +1,35 @@
+{
+  "folders": [
+    { "name": "🌾 AgriPredict Root",   "path": "." },
+    { "name": "⚛️  Frontend (React)",   "path": "frontend" },
+    { "name": "🟢 Backend (Node.js)",   "path": "backend" },
+    { "name": "🐍 ML Service (Python)", "path": "ml-service" }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[python]": { "editor.defaultFormatter": "ms-python.python" },
+    "terminal.integrated.env.windows": { "PYTHONPATH": "${workspaceFolder:🐍 ML Service (Python)}" }
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "ms-python.python",
+      "dbaeumer.vscode-eslint",
+      "ms-python.vscode-pylance"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Launch React",
+        "type": "node",
+        "request": "launch",
+        "cwd": "${workspaceFolder:⚛️  Frontend (React)}",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["start"]
+      }
+    ]
+  }
+}
