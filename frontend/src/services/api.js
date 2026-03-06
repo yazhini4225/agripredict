@@ -1,14 +1,38 @@
 import axios from 'axios';
 
+const ML_URL = 'https://agripredict-ml.onrender.com';
+
 const ml = axios.create({ 
-  baseURL: 'https://agripredict-ml.onrender.com', 
-  timeout: 60000  
+  baseURL: ML_URL, 
+  timeout: 120000  // 2 minutes — enough for cold start
 });
 
-export const predictYield       = (data) => ml.post('/predict',         data).then(r => r.data);
-export const optimizeYield      = (data) => ml.post('/optimize',        data).then(r => r.data);
-export const getRecommendations = (data) => ml.post('/recommendations', data).then(r => r.data);
-export const getLivePrices      = ()     => ml.get('/prices').then(r => r.data).catch(() => ({ prices: {} }));
+// Wake up the ML service before making requests
+const wakeUp = async () => {
+  try {
+    await axios.get(`${ML_URL}/health`, { timeout: 90000 });
+  } catch (e) {
+    // ignore — just waking it up
+  }
+};
+
+export const predictYield = async (data) => {
+  await wakeUp();
+  return ml.post('/predict', data).then(r => r.data);
+};
+
+export const optimizeYield = async (data) => {
+  await wakeUp();
+  return ml.post('/optimize', data).then(r => r.data);
+};
+
+export const getRecommendations = async (data) => {
+  await wakeUp();
+  return ml.post('/recommendations', data).then(r => r.data);
+};
+
+export const getLivePrices = () =>
+  ml.get('/prices').then(r => r.data).catch(() => ({ prices: {} }));
 
 export const getCrops = () => Promise.resolve({
   crops:   ["Maize","Wheat","Rice","Soybean","Barley","Sunflower","Cotton","Sugarcane"],
